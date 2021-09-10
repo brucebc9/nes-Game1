@@ -7,14 +7,13 @@ Finally, turn on the PPU to display video.
 */
 
 #include "neslib.h"
-#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include <nes.h>
 #include "game1TitleScreen.h"
 // CHR data
 //#resource "game1TitleScreen.chr"
-//#link "game1ileset.s"
+;;//#link "game1tileset.s"
 
 #define SFX_START    0
 #define FP_BITS  4
@@ -179,7 +178,7 @@ void title_screen(void)
     }
   }
 
-  scroll(-8,0);//if start is pressed, show the title at whole
+  scroll(0-8,0);//if start is pressed, show the title at whole
   sfx_play(SFX_START,0);
 
   for(i=0;i<16;++i)//and blink the text faster
@@ -209,7 +208,7 @@ void recommend(unsigned int choice)
 
 
   void initialPrompt(void){
-  vram_adr(NTADR_A(2,6));
+  vram_adr(NTADR_C(2,6));
   vram_write("What are you craving?",21);
   vram_adr(NTADR_A(4,8));
   vram_write("Breakfast? Press A",18);
