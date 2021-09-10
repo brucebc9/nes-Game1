@@ -42,67 +42,68 @@ static unsigned char i;
 
 // draw a message on the screen
 const char *breakfast[] = {
-    "Bacon and Eggs ",
-    "Cereal ",
-    "Pancakes ",
-    "Chicken and Waffles ",
-    "Scrambled Eggs ",
-    "Bacon Omelette ",
-    "Oatmeal ",
-    "Banana Bread ",
-    "French Toast ",
-    "Cinnamon Rolls ",
-    "Migas ",
-    "Breakfast Tacos ",
-    "Hot Pockets ",
-    "Hash Browns ",
-    "Eggs Benedict ",
-    "Crepe ",
-    "Sausage and Eggs ",
-    "Breakfast Burritos "
+    "Bacon and Eggs          ", 
+    "Cereal                  ",
+    "Pancakes                ",
+    "Chicken and Waffles     ",
+    "Scrambled Eggs          ",
+    "Bacon Omelette          ",
+    "Oatmeal                 ",
+    "Banana Bread            ",
+    "French Toast            ",
+    "Cinnamon Rolls          ",
+    "Migas                   ",
+    "Breakfast Tacos         ",
+    "Hot Pockets             ",
+    "Hash Browns             ",
+    "Eggs Benedict           ",
+    "Crepes                  ",
+    "Sausage & Eggs          ",
+    "Breakfast Burritos      "
   };
 
   const char *lunch[] = {
-    "Corn Dogs ",
-    "Cheesesteak ",
-    "Mac and Cheese ",
-    "Burritos ",
-    "Hot dogs ",
-    "Fried Chicken ",
-    "Fish and chips ",
-    "Turkey ",
-    "Meatloaf ",
-    "Tacos ",
-    "Tamales ",
-    "Nachos ",
-    "Salad ",
-    "Peanut Butter and Jelly Sandwich ",
-    "a Sandwich ",
-    "Grilled Cheese ",
-    "Quesadillas ",
-    "Chicken Soup "
+    "Corn Dogs                ",
+    "Cheesesteak              ",
+    "Mac and Cheese           ",
+    "Burritos                 ",
+    "Hot dogs                 ",
+    "Fried Chicken            ",
+    "Fish and Chips           ",
+    "Turkey                   ",
+    "Meatloaf                 ",
+    "Tacos                    ",
+    "Tamales                  ",
+    "Nachos                   ",
+    "Salad                    ",
+    "PB&J Sandwich            ",
+    "a Sandwich               ",
+    "Grilled Cheese           ",
+    "Quesadillas              ",
+    "Chicken Soup             "
   };
 
   const char *dinner[] = {
-    "Burgers and French Fries ",
-    "Pizza ",
-    "Sushi ",
-    "Wings ",
-    "Lobster ",
-    "Chicken Cordon Bleu ",
-    "Oysters ",
-    "Ribs ",
-    "Barbecue ",
-    "Ramen ",
-    "Gumbo ",
-    "Dumplings ",
-    "Lasagna ",
-    "Spaghetti and Meatballs ",
-    "Mole ",
-    "Fajitas ",
-    "Chili Dogs ",
-    "Steak and Mashed Potatoes "
+    "Burgers & French Fries   ",
+    "Pizza                    ",
+    "Sushi                    ",
+    "Wings                    ",
+    "Lobster                  ",
+    "Chicken Cordon Bleu      ",
+    "Oysters                  ",
+    "Ribs                     ",
+    "Barbecue                 ",
+    "Ramen                    ",  
+    "Gumbo                    ",
+    "Dumplings                ",
+    "Lasagna                  ",
+    "Spaghetti and Meatballs  ",
+    "Mole                     ",
+    "Fajitas                  ",
+    "Chili Dogs               ",
+    "Steak                    "
   };
+
 
 void put_str(unsigned int adr, const char *str) {
   vram_adr(adr);        // set PPU read/write address
@@ -198,30 +199,16 @@ void recommend(unsigned int choice)
   vram_adr(NTADR_A(2,14));
   vram_write("You should try ",14);
   if(choice==1)
-  put_str(NTADR_A(17,14),breakfast[randomNum1]);
+  put_str(NTADR_A(2,16),breakfast[randomNum1]);
    if(choice==2)
-  put_str(NTADR_A(17,14),lunch[randomNum1]);
+  put_str(NTADR_A(2,16),lunch[randomNum1]);
   if (choice==3)
-  put_str(NTADR_A(17,14),dinner[randomNum1]);
-    
+  put_str(NTADR_A(2,16),dinner[randomNum1]);
+      
 }
 
 
-void main(void) {
-
- unsigned int choice =0;
-
-  // set palette colors
-  pal_col(0,0x16);	// set screen to dark blue
-  pal_col(1,0x14);	// fuchsia
-  pal_col(2,0x20);	// grey
-  pal_col(3,0x30);	// white
-
-  // write text to name table
-  //title_screen();
-  vram_write("HELLO, SENIOR PROJECT!", 22);	// write bytes to video RAM
-  vram_adr(NTADR_A(2,2));
-  vram_write("Welcome to The Hunger Game!",28);
+  void initialPrompt(void){
   vram_adr(NTADR_A(2,6));
   vram_write("What are you craving?",21);
   vram_adr(NTADR_A(4,8));
@@ -231,16 +218,59 @@ void main(void) {
   vram_adr(NTADR_A(4,10));
   vram_write("Dinner?    Press Start",22);
   vram_adr(NTADR_A(2,14));
- 
+  }
 
- 
-  /*
-  put_str(NTADR_A(2,19),"Are you still hungry?");
-  vram_adr(NTADR_A(4,21));
-  vram_write("Yes?",4);
-  vram_adr(NTADR_A(4,22));
-  vram_write("No?",4);*/
+
+
+void mainLoop(void){
+  ppu_on_all();
+  while(1) {
+      
+    if (pad_trigger(0) & PAD_A){
+      ppu_off();
+      recommend(1);
+      ppu_on_all();
+      sfx_play(0,0);
+
+    }
+    if (pad_trigger(0) & PAD_B){
+      ppu_off();
+      recommend(2);
+      ppu_on_all();
+      sfx_play(0,0);
+
+    }
+    if (pad_trigger(0) & PAD_START){
+      ppu_off();
+      recommend(3);
+      ppu_on_all();
+      sfx_play(0,0);
+    }
+
+      };
+}
   
+
+
+
+void main(void) {
+
+ unsigned int choice =0;
+
+  //run title screen
+  //title_screen();
+  
+  //Set Pallete Colors
+  pal_col(0,0x16);	// set screen to red
+  pal_col(1,0x14);	// fuchsia
+  pal_col(2,0x20);	// grey
+  pal_col(3,0x30);	// white
+  
+  // write text to name table
+	
+  vram_adr(NTADR_A(2,2));// write bytes to video RAM
+  vram_write("Welcome to The Hunger Game!",28);
+  initialPrompt();
   
   famitone_init(after_the_rain_music_data);
   sfx_init(demo_sounds);
@@ -249,51 +279,9 @@ void main(void) {
   // play music
   music_play(0);
   // enable PPU rendering (turn on screen)
-  ppu_on_all();
   
-      while(1) {
-      
-    if (pad_trigger(0) & PAD_A){
-      ppu_off();
-      recommend(1);
-      ppu_on_all();
-      //sfx_play(0,0);
-	//break;
-    }
-    if (pad_trigger(0) & PAD_B){
-      ppu_off();
-      recommend(2);
-      ppu_on_all();
-      //sfx_play(0,0);
-	//break;
-    }
-    if (pad_trigger(0) & PAD_START){
-      ppu_off();
-      recommend(3);
-      ppu_on_all();
-      //sfx_play(0,0);
-	//break;
-    }
-
-      };
+  
+  mainLoop();
 
 
-  // infinite loop
-    while(1) {
-      
-    // poll controller 0
-    char pad = pad_poll(0);
-    // play sounds when buttons pushed
-    if (pad & PAD_A) {
-      sfx_play(0,0);
-    }
-    if (pad & PAD_START) {
-      sfx_play(0,0);
-    }
-    if (pad & PAD_B) {
-      sfx_play(0,0);
-    }
-
-    
-  }
 }
