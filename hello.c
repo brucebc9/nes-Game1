@@ -248,8 +248,8 @@ void mainLoop(void){
       ppu_off();
       recommend(2);
       ppu_on_all();
-      sfx_play(0,0)
-       tryAgain();;
+      sfx_play(0,0);
+       tryAgain();
 
     }
     if (pad_trigger(0) & PAD_START){
