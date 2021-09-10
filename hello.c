@@ -208,7 +208,7 @@ void recommend(unsigned int choice)
 
 
   void initialPrompt(void){
-  vram_adr(NTADR_C(2,6));
+  vram_adr(NTADR_A(2,6));
   vram_write("What are you craving?",21);
   vram_adr(NTADR_A(4,8));
   vram_write("Breakfast? Press A",18);
@@ -219,7 +219,14 @@ void recommend(unsigned int choice)
   vram_adr(NTADR_A(2,14));
   }
 
-
+void tryAgain(void){
+      delay(80);
+      ppu_off();
+      vram_adr(NTADR_A(2,20));
+      vram_write("Not pleased? - Try again",24);
+      ppu_on_all();
+  
+}
 
 void mainLoop(void){
   ppu_on_all();
@@ -230,13 +237,19 @@ void mainLoop(void){
       recommend(1);
       ppu_on_all();
       sfx_play(0,0);
+      tryAgain();
+
+      
+      //vram_write("",22);
+      
 
     }
     if (pad_trigger(0) & PAD_B){
       ppu_off();
       recommend(2);
       ppu_on_all();
-      sfx_play(0,0);
+      sfx_play(0,0)
+       tryAgain();;
 
     }
     if (pad_trigger(0) & PAD_START){
@@ -244,6 +257,7 @@ void mainLoop(void){
       recommend(3);
       ppu_on_all();
       sfx_play(0,0);
+      tryAgain();
     }
 
       };
