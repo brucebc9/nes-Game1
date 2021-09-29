@@ -3,7 +3,11 @@
 #include <string.h>
 #include <nes.h>
 #include "game1TitleScreen.h"
+#include "vrambuf.h"
+//#link "vrambuf.c"
+
 // CHR data
+//#link "chr_generic.s"
 //#resource "game1TitleScreen.chr"
 ;;//#link "game1tileset.s"
 
@@ -127,6 +131,7 @@ void title_screen(void)
   vram_adr(NAMETABLE_A);
   vram_unrle(game1TitleScreen);
 
+ 
   vram_adr(NAMETABLE_C);//clear second nametable, as it is visible in the jumping effect
   vram_fill(0,1024);
 
@@ -140,6 +145,7 @@ void title_screen(void)
   frame_cnt=0;
   wait=160;
   bright=4;
+  
 
   while(1)
   {
@@ -179,7 +185,7 @@ void title_screen(void)
     delay(4);
   }
 
-  pal_fade_to(0);
+  pal_fade_to(4);
 }
 
  
@@ -231,10 +237,6 @@ void mainLoop(void){
       sfx_play(0,0);
       tryAgain();
 
-      
-      //vram_write("",22);
-      
-
     }
     if (pad_trigger(0) & PAD_B){
       ppu_off();
@@ -255,15 +257,18 @@ void mainLoop(void){
       };
 }
   
-
-
-
 void main(void) {
 
  unsigned int choice =0;
 
   //run title screen
   //title_screen();
+  
+  //clear screen
+  vrambuf_clear();
+  ppu_off();
+  vram_adr(NTADR_A(0,0));
+  vram_fill(0, 1024);
   
   //Set Pallete Colors
   pal_col(0,0x16);	// set screen to red
@@ -272,7 +277,7 @@ void main(void) {
   pal_col(3,0x30);	// white
   
   // write text to name table
-	
+
   vram_adr(NTADR_A(2,2));// write bytes to video RAM
   vram_write("Welcome to The Hunger Game!",28);
   initialPrompt();
